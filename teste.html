@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="teste">teste</button>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    document.getElementById("teste").addEventListener('click', async () => {
+        console.log('clicou')
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+
+        try {
+            const response = await fetch('http://192.168.4.16:3000/login/validate', {
+                method: 'POST',
+               // redirect: 'follow',
+                credentials: 'include', // Don't forget to specify this if you need cookies
+                headers: headers,
+                body: JSON.stringify({
+                    name: 'marcos2',
+                    password: 'ju150203'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro na solicitação');
+            }
+
+            // Lidar com a resposta da solicitação aqui
+            console.log('Resposta:', response);
+        } catch (error) {
+            console.error('Erro:', error);
+        }
+    });
+
+</script>
+
+</html>
