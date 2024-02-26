@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus, Res } from '@nestjs/common';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { UpdateLoginDto } from './dto/update-login.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Login } from './entities/login.entity';
+import { Usuario } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { ValidateDto } from './dto/validate-login.dto';
 import { Response } from 'express';
@@ -10,7 +10,7 @@ import { TokenGenerateService } from 'src/token-generate-service/token-generate.
 
 @Injectable()
 export class LoginService {
-  constructor(@InjectRepository(Login) private login: Repository<Login>, private token: TokenGenerateService) { }
+  constructor(@InjectRepository(Usuario) private login: Repository<Usuario>, private token: TokenGenerateService) { }
 
   async create(createLoginDto: CreateLoginDto) {
     const create = await this.login.insert({

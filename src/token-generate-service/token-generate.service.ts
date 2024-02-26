@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken'
-import { Login } from 'src/login/entities/login.entity';
+import { Usuario } from 'src/login/entities/user.entity';
 @Injectable()
 export class TokenGenerateService {
     private readonly secretKey = 'senhacomplicada'
@@ -8,7 +8,7 @@ export class TokenGenerateService {
         expiresIn: "1h"
     }
 
-    getToken(user: Login): string {
+    getToken(user: Usuario): string {
         return jwt.sign({ ...user }, this.secretKey, this.settings)
     }
 
