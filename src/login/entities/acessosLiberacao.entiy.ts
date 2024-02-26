@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { PerfilAcesso } from "./acessos.entity";
+import { PerfilAcesso } from "./perfildeacesso.entity";
 import { Pagina } from "./pagina.entity";
 @Entity()
 

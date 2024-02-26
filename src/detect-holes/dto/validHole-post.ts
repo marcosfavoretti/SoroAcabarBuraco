@@ -13,7 +13,7 @@ export class ValidHolesDto {
     @IsNotEmpty()
     @IsLongitude()
     longitude: string;
-
+    
     @IsString()
     desc: string;
 }

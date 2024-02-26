@@ -3,20 +3,25 @@ import { CreateDetectHoleDto } from './dto/create-detect-hole.dto';
 import { UpdateDetectHoleDto } from './dto/update-detect-hole.dto';
 import { ValidHolesDto } from './dto/validHole-post';
 import { ApiDetectHoleService } from './services/api-detect-hole-service/api-detect-hole.service';
-import { ReturningStatementNotSupportedError } from 'typeorm';
+import { Repository } from 'typeorm';
+import { Patalogia } from './entities/detect-hole.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class DetectHolesService {
-  constructor(private api: ApiDetectHoleService) {
+  constructor(private api: ApiDetectHoleService,
+    @InjectRepository(Patalogia) private holes: Repository<Patalogia>
+  ) {
   }
 
-  create(createDetectHoleDto: CreateDetectHoleDto) {
+  private create(createDetectHoleDto: CreateDetectHoleDto) {
     return 'This action adds a new detectHole';
   }
+
   async predict(hole: ValidHolesDto) {
     const n_holes = await this.api.callApiDetectHole(hole.x64)
-    if (!n_holes) return n_holes //caso for 0 ja retorna 0
     //
+      
     //func para salvar no banco para salvar o obj
     return n_holes
   }

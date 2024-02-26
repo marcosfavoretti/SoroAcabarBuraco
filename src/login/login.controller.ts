@@ -14,7 +14,7 @@ export class LoginController {
     return await this.loginService.create(createLoginDto);
   }
 
-  //@UseGuards(TokenGuardGuard)
+  @UseGuards(TokenGuardGuard)
   @Get()
   findAll() {
     return this.loginService.findAll();
@@ -33,10 +33,11 @@ export class LoginController {
 
   @Post('/validate')
   async validate(@Body(new ValidationPipe({ whitelist: true })) validate: ValidateDto, @Res() res: Response) {
+    console.log('validaçao')
     const token_of_use = await this.loginService.validate(validate)
     res.cookie('authToken', token_of_use, {
       maxAge: 3600 * 1000,
-      sameSite: 'none',
+      sameSite: 'strict',
     });
     // Envie a resposta com o status 200 e encerre a requisição
     return res.status(HttpStatus.OK).send();

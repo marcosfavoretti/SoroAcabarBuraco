@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { PerfilAcesso } from './acessos.entity';
+import { PerfilAcesso } from './perfildeacesso.entity';
 
 @Entity()
 export class Usuario {
@@ -8,7 +8,7 @@ export class Usuario {
 
   @ManyToOne(() => PerfilAcesso)
   @JoinColumn({ name: 'idPerfil' })
-  idPerfil: PerfilAcesso
+  idPerfil: number
 
   @Column()
   name: string;
@@ -19,9 +19,8 @@ export class Usuario {
   @Column()
   email: string;
 
-
   @Column({ type: 'decimal', precision: (10), scale: (2) })
-  rank: string;
+  rank: number;
 
   @Column()
   telefone: string

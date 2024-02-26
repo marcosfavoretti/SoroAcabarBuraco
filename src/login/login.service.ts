@@ -7,17 +7,33 @@ import { Repository } from 'typeorm';
 import { ValidateDto } from './dto/validate-login.dto';
 import { Response } from 'express';
 import { TokenGenerateService } from 'src/token-generate-service/token-generate.service';
+import { Endereco } from './entities/endereco.entity';
 
 @Injectable()
 export class LoginService {
-  constructor(@InjectRepository(Usuario) private login: Repository<Usuario>, private token: TokenGenerateService) { }
+  constructor(@InjectRepository(Usuario) private login: Repository<Usuario>,
+    @InjectRepository(Endereco) private endereco: Repository<Endereco>
+    , private token: TokenGenerateService) { }
 
   async create(createLoginDto: CreateLoginDto) {
-    const create = await this.login.insert({
-      ...createLoginDto
+    const newUser = {
+      ...createLoginDto,
+      rank: 0,
+      idPerfil: 1 //por default set como 1 para sempre os novos cadastrados serem users
+    }
+    const created_user = await this.login.insert({
+      ...newUser
     });
-    if (!create.raw.affectedRows) throw new HttpException('Nao foi possivel cadastrar o usuario', 400)
+    await this.createAddress(createLoginDto, created_user.raw.insertId)
+    if (!created_user.raw.affectedRows) throw new HttpException('Nao foi possivel cadastrar o usuario', 400)
     return
+  }
+
+  private async createAddress(createLoginDto: CreateLoginDto, iduser: number) {
+    await this.endereco.insert({
+      ...createLoginDto,
+      idUsuario: iduser
+    })
   }
 
   findAll() {

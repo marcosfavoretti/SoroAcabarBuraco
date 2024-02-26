@@ -7,7 +7,7 @@ export class Endereco {
 
     @OneToOne(() => Usuario)
     @JoinColumn({ name: 'idUsuario' })
-    idUsuario: Usuario
+    idUsuario: number
 
     @Column()
     rua: string

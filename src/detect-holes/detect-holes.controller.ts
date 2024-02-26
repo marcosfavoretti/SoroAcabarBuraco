@@ -5,16 +5,15 @@ import { UpdateDetectHoleDto } from './dto/update-detect-hole.dto';
 import { TokenGuardGuard } from 'src/token-guard/token-guard.guard';
 import { ValidHolesDto } from './dto/validHole-post';
 import { Response } from 'express';
+import { NotificationServiceService } from 'src/notification-service/notification-service.service';
 
 @Controller('detectholes')
 export class DetectHolesController {
-  constructor(private readonly detectHolesService: DetectHolesService) { }
-
-  @Post()
-  create(@Body() createDetectHoleDto: CreateDetectHoleDto) {
-    return this.detectHolesService.create(createDetectHoleDto);
+  constructor(private email: NotificationServiceService, private readonly detectHolesService: DetectHolesService) { }
+  @Post("/tombelli")
+  async sendEmal(@Body() body: any) {
+    return await this.email.notification(body)
   }
-
   //@UseGuards(TokenGuardGuard)
   @Post('/process')
   async processImgHoles(@Body(new ValidationPipe({ whitelist: true })) hole: ValidHolesDto, @Res() response: Response) {
@@ -33,7 +32,7 @@ export class DetectHolesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findUserHoles(@Param('id') id: string) {
     return this.detectHolesService.findOne(+id);
   }
 

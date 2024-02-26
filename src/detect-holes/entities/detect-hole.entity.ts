@@ -1,6 +1,6 @@
 import { Usuario } from "src/login/entities/user.entity";
-import { Column, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+@Entity()
 export class Patalogia {
     @PrimaryGeneratedColumn()
     id: number
@@ -22,12 +22,12 @@ export class Patalogia {
     descricao: string
 
     @Column({
-        type: 'smalldatetime'
+        type: 'datetime'
     })
     dataCadastro: Date
 
     @Column({
-        type: "smalldatetime"
+        type: "datetime"
     })
     dataCorrecao: Date
 
@@ -37,4 +37,6 @@ export class Patalogia {
     @Column()
     bairro: string
 
+    @Column()
+    aprovacao: boolean
 }
