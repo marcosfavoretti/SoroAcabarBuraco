@@ -1,39 +1,44 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UseGuards, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UseGuards, Res, HttpStatus, Req, HttpException } from '@nestjs/common';
 import { DetectHolesService } from './detect-holes.service';
 import { CreateDetectHoleDto } from './dto/create-detect-hole.dto';
 import { UpdateDetectHoleDto } from './dto/update-detect-hole.dto';
 import { TokenGuardGuard } from 'src/token-guard/token-guard.guard';
 import { ValidHolesDto } from './dto/validHole-post';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { NotificationServiceService } from 'src/notification-service/notification-service.service';
+import { TokenGenerateService } from 'src/token-generate-service/token-generate.service';
 
 @Controller('detectholes')
 export class DetectHolesController {
-  constructor(private email: NotificationServiceService, private readonly detectHolesService: DetectHolesService) { }
-  @Post("/tombelli")
+  constructor(private token: TokenGenerateService, private email: NotificationServiceService, private readonly detectHolesService: DetectHolesService) { }
+
+  @Post("/tombelli")//rota de debug so para teste
   async sendEmal(@Body() body: any) {
     return await this.email.notification(body)
   }
-  //@UseGuards(TokenGuardGuard)
+
+  @UseGuards(TokenGuardGuard)
   @Post('/process')
-  async processImgHoles(@Body(new ValidationPipe({ whitelist: true })) hole: ValidHolesDto, @Res() response: Response) {
-    const n_holes = await this.detectHolesService.predict(hole);
+  async processImgHoles(@Body(new ValidationPipe({ whitelist: true })) hole: ValidHolesDto, @Res() response: Response, @Req() req: Request) {
+    const user = this.token.tokenVerify(req.headers.authorization.split(" ")[1])
+    const n_holes = await this.detectHolesService.predict(hole, user);
+
     const date = new Date()
     return response.status(HttpStatus.OK).send({
-      accepted: n_holes === 0 ? false : true, //caso o valor for 0 ele nao foi aceito o buraco
-      nHoles: n_holes,
-      accepted_time: `${date.toLocaleDateString("pt-br")} ${date.toTimeString()}`
+      ...n_holes
     })
   }
 
   @Get()
-  findAll() {
-    return this.detectHolesService.findAll();
+  async findAll() {
+    return await this.detectHolesService.findAll();
   }
 
-  @Get(':id')
-  findUserHoles(@Param('id') id: string) {
-    return this.detectHolesService.findOne(+id);
+  @UseGuards(TokenGuardGuard)
+  @Get("/user")
+  async findUserHoles(@Req() req: Request) {
+    const user = this.token.tokenVerify(req.headers.authorization.split(" ")[1])
+    return await this.detectHolesService.userHoleLog(user)
   }
 
   @Patch(':id')

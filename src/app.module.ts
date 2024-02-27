@@ -12,9 +12,14 @@ import { Endereco } from './login/entities/endereco.entity';
 import { AcessoLiberacao } from './login/entities/acessosLiberacao.entiy';
 import { Patalogia } from './detect-holes/entities/detect-hole.entity';
 import { NotificationServiceService } from './notification-service/notification-service.service';
+import { ServeStaticModule } from "@nestjs/serve-static"
 @Module({
   imports: [LoginModule,
     DetectHolesModule,
+    ServeStaticModule.forRoot({
+      rootPath: "C:\\HoleDetector",
+
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',

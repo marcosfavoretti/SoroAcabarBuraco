@@ -3,8 +3,8 @@ import { LoginService } from './login.service';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { UpdateLoginDto } from './dto/update-login.dto';
 import { ValidateDto } from './dto/validate-login.dto';
-import { Response } from 'express';
 import { TokenGuardGuard } from 'src/token-guard/token-guard.guard';
+import { Response } from 'express';
 @Controller('login')
 export class LoginController {
   constructor(private readonly loginService: LoginService) { }
@@ -16,30 +16,25 @@ export class LoginController {
 
   @UseGuards(TokenGuardGuard)
   @Get()
-  findAll() {
+  findAll(@Body() body: any) {
     return this.loginService.findAll();
   }
 
+  @UseGuards(TokenGuardGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateLoginDto: UpdateLoginDto) {
     return await this.loginService.update(+id, updateLoginDto);
   }
 
-
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return await this.loginService.remove(+id);
-  }
+  // @UseGuards(TokenGuardGuard)
+  // @Delete(':id')
+  // async remove(@Param('id') id: string) {
+  //   return await this.loginService.remove(+id);
+  // }
 
   @Post('/validate')
-  async validate(@Body(new ValidationPipe({ whitelist: true })) validate: ValidateDto, @Res() res: Response) {
-    console.log('validaçao')
-    const token_of_use = await this.loginService.validate(validate)
-    res.cookie('authToken', token_of_use, {
-      maxAge: 3600 * 1000,
-      sameSite: 'strict',
-    });
-    // Envie a resposta com o status 200 e encerre a requisição
-    return res.status(HttpStatus.OK).send();
+  async validate(@Body(new ValidationPipe({ whitelist: true })) validate: ValidateDto, @Res() response: Response) {
+    const token = await this.loginService.validate(validate)
+    return response.status(HttpStatus.OK).json(token)
   }
 }

@@ -1,4 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { existsSync, writeFile, mkdir } from 'fs';
+
 const sharp = require("sharp")
 @Injectable()
 export class ImageOperationsService {
@@ -12,4 +14,5 @@ export class ImageOperationsService {
             throw new HttpException('nao foi possivel redimencionar a img', 500)
         }
     }
+
 }

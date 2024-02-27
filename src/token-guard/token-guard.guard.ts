@@ -10,17 +10,11 @@ export class TokenGuardGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request: Request = context.switchToHttp().getRequest();
-    try {
-      console.log(request.cookies)
-      if (!request.cookies["authToken"]) return false
-
-      const decoded = this.token.tokenVerify(request.cookies["authToken"]);
-      request.body.user = decoded; // Adiciona o usuário decodificado ao objeto de solicitação
-      console.log(decoded)
-      return true;
-    } catch (error) {
-      return false;
+    if (!request.headers.authorization) {
+      return false
     }
-
+    const [_, token] = request.headers.authorization.split(" ")
+    const decoded = this.token.tokenVerify(token);
+    return !!(decoded);
   }
 }

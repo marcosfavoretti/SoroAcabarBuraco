@@ -5,7 +5,7 @@ import { Usuario } from 'src/login/entities/user.entity';
 export class TokenGenerateService {
     private readonly secretKey = 'senhacomplicada'
     private readonly settings = {
-        expiresIn: "1h"
+        expiresIn: "12h"
     }
 
     getToken(user: Usuario): string {
@@ -15,7 +15,12 @@ export class TokenGenerateService {
     tokenVerify(token: string) {
         try {
             jwt.verify(token, this.secretKey)
-            return jwt.decode(token)
+
+            const user = jwt.decode(token)
+            delete user.exp
+            delete user.iat
+            return user
+
         }
         catch {
             throw new HttpException('token invalido', 500)

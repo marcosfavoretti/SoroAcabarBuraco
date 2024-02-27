@@ -4,12 +4,9 @@ import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin: ["http://127.0.0.1:5500"], // Substitua XXXX pela porta do cliente local
-    credentials: true // Permite credenciais (cookies)
-  })
-  // app.use(bodyParser.json({ limit: '50mb' }));
-  // app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+  app.enableCors()
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   await app.listen(3000);
 }
 bootstrap();

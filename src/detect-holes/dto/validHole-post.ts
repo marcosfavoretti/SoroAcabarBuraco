@@ -8,12 +8,12 @@ export class ValidHolesDto {
 
     @IsNotEmpty()
     @IsLatitude()
-    latitude: string;
+    latitude: number;
 
     @IsNotEmpty()
     @IsLongitude()
-    longitude: string;
-    
+    longitude: number;
+
     @IsString()
     desc: string;
 }

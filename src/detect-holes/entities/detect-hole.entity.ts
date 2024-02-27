@@ -7,7 +7,7 @@ export class Patalogia {
 
     @ManyToOne(() => Usuario)
     @JoinColumn({ name: "idUsuario" })
-    idUsuario: number
+    idUsuario: Usuario
 
     @Column({ type: 'decimal', precision: 10, scale: 8 })
     latitude: number
@@ -27,9 +27,10 @@ export class Patalogia {
     dataCadastro: Date
 
     @Column({
-        type: "datetime"
+        type: "datetime",
+        nullable: true
     })
-    dataCorrecao: Date
+    dataCorrecao: Date | undefined
 
     @Column()
     rua: string

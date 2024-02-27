@@ -53,10 +53,11 @@ export class LoginService {
       where: {
         name: validateDto.name,
         password: validateDto.password
-      }
+      }, relations:
+        ['idPerfil']
     })
     if (!user) throw new HttpException("Credenciais não encontradas", HttpStatus.NOT_FOUND)
-    return this.token.getToken(user)
+    return { uid: this.token.getToken(user) }
   }
 
   async update(id: number, updateLoginDto: UpdateLoginDto) {
