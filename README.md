@@ -7,7 +7,7 @@
 3. Execute `npm i`.
 4. Caso seja a primeira vez que estiver rodando o projeto, vá para `app.module.ts` e defina o valor `synchronize: true`. Após iniciar o servidor, volte esse valor para `false`. Isso criará as tabelas e suas dependências.
 
-**Se estiver usando o processamento de imagem, é necessário um webservice feito em Python.**
+**Se estiver usando o processamento de imagem, é necessário um webservice feito em Python. Link do projeto `https://github.com/marcosfavoretti/WebServiceHoleDetector.git`**
 
 ## START
 
