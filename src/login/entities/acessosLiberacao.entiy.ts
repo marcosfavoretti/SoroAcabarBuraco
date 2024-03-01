@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { PerfilAcesso } from "./perfildeacesso.entity";
 import { Pagina } from "./pagina.entity";
 @Entity()
@@ -11,16 +11,16 @@ export class AcessoLiberacao {
     @JoinColumn({ name: "idPerfilAcesso" })
     idPerfilAcesso: PerfilAcesso
 
-    @OneToOne(() => Pagina)
-    @JoinColumn({ name: "idPagina" })
+    @ManyToOne(() => Pagina)
+    @JoinColumn({ name: "idPagina", referencedColumnName: "id" })
     idPagina: Pagina
 
-    @Column()
+    @Column({ type: "boolean" })
     visualisar: boolean
 
-    @Column()
+    @Column({ type: "boolean" })
     editar: boolean
 
-    @Column()
+    @Column({ type: "boolean" })
     excluir: boolean
 }

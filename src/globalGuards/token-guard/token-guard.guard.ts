@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { TokenGenerateService } from 'src/token-generate-service/token-generate.service';
+import { TokenGenerateService } from 'globalServices/token-generate-service/token-generate.service';
 
 @Injectable()
 export class TokenGuardGuard implements CanActivate {
@@ -15,6 +15,7 @@ export class TokenGuardGuard implements CanActivate {
     }
     const [_, token] = request.headers.authorization.split(" ")
     const decoded = this.token.tokenVerify(token);
+    request.headers.decodetoken = decoded
     return !!(decoded);
   }
 }

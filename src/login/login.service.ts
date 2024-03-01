@@ -6,7 +6,7 @@ import { Usuario } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { ValidateDto } from './dto/validate-login.dto';
 import { Response } from 'express';
-import { TokenGenerateService } from 'src/token-generate-service/token-generate.service';
+import { TokenGenerateService } from 'globalServices/token-generate-service/token-generate.service';
 import { Endereco } from './entities/endereco.entity';
 
 @Injectable()
@@ -61,6 +61,8 @@ export class LoginService {
   }
 
   async update(id: number, updateLoginDto: CreateLoginDto) {
+    console.log(id
+    )
     const find = await this.findOne(id)
     if (!find.length) throw new HttpException("Usuario nao encontrado", HttpStatus.NOT_FOUND)
     const update = await this.login.update(

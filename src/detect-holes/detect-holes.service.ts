@@ -16,7 +16,8 @@ export class DetectHolesService {
 
   ) { }
 
-  async predict(hole: ValidHolesDto, user: Usuario) {
+  async validHole(hole: ValidHolesDto, user: Usuario) {
+
 
     if (!(await this.outofRange(hole))) throw new HttpException("Buraco no perimetro ja registrado", 405)
 
@@ -31,7 +32,6 @@ export class DetectHolesService {
       dataCadastro: new Date(),
       dataCorrecao: null,
       foto: fileName,
-      idUsuario: user,
       descricao: hole.desc,
       latitude: hole.latitude,
       longitude: hole.longitude,
@@ -39,9 +39,12 @@ export class DetectHolesService {
       rua: road,
     }
     this.holes.insert({
-      ...newHole
+      ...newHole,
+      idUsuario: user
     })
     if (nHoles) await this.incrementRank(user, nHoles)
+    // delete newHole.idUsuario //fiz isso para nao voltar meu usuario junto com meu objeto no json
+
     //func para salvar no banco para salvar o obj
     return newHole
   }
@@ -52,7 +55,6 @@ export class DetectHolesService {
         iduser: user.iduser
       }
     }).then(async (result) => {
-      console.log(result.rank)
       await this.user.update({
         iduser: result.iduser
       }, {
@@ -62,10 +64,12 @@ export class DetectHolesService {
   }
 
   async findAll() {
-    return await this.holes.find({ relations: ['idUsuario'] });
+    // return await this.holes.find({ relations: ['idUsuario'] }); //deixei comentando par anao enviar no json info dos usuarios juntas
+    return await this.holes.find();
   }
 
   async userHoleLog(user: Usuario) {
+    console.log(user)
     return await this.holes.createQueryBuilder('hole')
       .where('hole.idUsuario= :idUsuario', { idUsuario: user.iduser })
       .getMany();
@@ -79,14 +83,13 @@ export class DetectHolesService {
   //   return `This action removes a #${id} detectHole`;
   // }
 
-
-  private async outofRange(hole: ValidHolesDto) {
+  private async outofRange(hole: ValidHolesDto): Promise<boolean> {
     const holesonRange = await this.findPerimeterHoles(hole.latitude, hole.longitude)
     if (!holesonRange) return true
     return false
   }
 
-  private async findPerimeterHoles(latitute: number, longitude: number) {
+  private async findPerimeterHoles(latitute: number, longitude: number): Promise<Patalogia> {
     const range = 0.00002 //range de 2 metros da cordenada
     const holesonRange = await this.holes.findOne({
       where: {//range de 2 metros 
@@ -94,7 +97,7 @@ export class DetectHolesService {
         longitude: Between(longitude - range, longitude + range)
       }
     })
-    console.log(holesonRange)
+    console.log('existe buraco no perimetro?', holesonRange ? 'existe' : 'nao existe')
     return holesonRange
   }
 

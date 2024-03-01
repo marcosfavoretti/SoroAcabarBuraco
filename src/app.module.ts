@@ -4,15 +4,16 @@ import { AppService } from './app.service';
 import { LoginModule } from './login/login.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './login/entities/user.entity';
-import { TokenGenerateService } from './token-generate-service/token-generate.service';
+import { TokenGenerateService } from '../globalServices/token-generate-service/token-generate.service';
 import { DetectHolesModule } from './detect-holes/detect-holes.module';
 import { PerfilAcesso } from './login/entities/perfildeacesso.entity';
 import { Pagina } from './login/entities/pagina.entity';
 import { Endereco } from './login/entities/endereco.entity';
 import { AcessoLiberacao } from './login/entities/acessosLiberacao.entiy';
 import { Patalogia } from './detect-holes/entities/detect-hole.entity';
-import { NotificationServiceService } from './notification-service/notification-service.service';
+import { NotificationServiceService } from '../globalServices/notification-service/notification-service.service';
 import { ServeStaticModule } from "@nestjs/serve-static"
+import { CheckRoleService } from './globalGuards/acesso-guard/check-role/check-role.service';
 @Module({
   imports: [LoginModule,
     DetectHolesModule,

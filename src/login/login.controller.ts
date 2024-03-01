@@ -3,9 +3,9 @@ import { LoginService } from './login.service';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { UpdateLoginDto } from './dto/update-login.dto';
 import { ValidateDto } from './dto/validate-login.dto';
-import { TokenGuardGuard } from 'src/token-guard/token-guard.guard';
+import { TokenGuardGuard } from 'src/globalGuards/token-guard/token-guard.guard';
 import { Request, Response } from 'express';
-import { TokenGenerateService } from 'src/token-generate-service/token-generate.service';
+import { TokenGenerateService } from 'globalServices/token-generate-service/token-generate.service';
 @Controller('login')
 export class LoginController {
   constructor(private readonly loginService: LoginService, private token: TokenGenerateService) { }
@@ -31,10 +31,8 @@ export class LoginController {
 
   @UseGuards(TokenGuardGuard)
   @Patch()
-  async update(@Body() updateLoginDto: CreateLoginDto, @Req() req: Request) {
-    const user = this.token.tokenVerify(req.headers.authorization.split(" ")[1])
-
-    return await this.loginService.update(+user.iduser, updateLoginDto);
+  async update(@Body(new ValidationPipe({whitelist: true})) updateLoginDto: CreateLoginDto, @Req() req: Request) {
+    return await this.loginService.update(+req.headers.decodetoken['iduser'], updateLoginDto);
   }
 
   @UseGuards(TokenGuardGuard)
