@@ -60,7 +60,7 @@ export class LoginService {
     return { uid: this.token.getToken(user) }
   }
 
-  async update(id: number, updateLoginDto: UpdateLoginDto) {
+  async update(id: number, updateLoginDto: CreateLoginDto) {
     const find = await this.findOne(id)
     if (!find.length) throw new HttpException("Usuario nao encontrado", HttpStatus.NOT_FOUND)
     const update = await this.login.update(

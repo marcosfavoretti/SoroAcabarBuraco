@@ -29,11 +29,13 @@ export class DetectHolesController {
     })
   }
 
+  //o usuario pode usar sem login o aplicativo
   @Get()
   async findAll() {
     return await this.detectHolesService.findAll();
   }
 
+  //log de usuario para pegar os buracos mandados por ele
   @UseGuards(TokenGuardGuard)
   @Get("/user")
   async findUserHoles(@Req() req: Request) {
@@ -46,8 +48,9 @@ export class DetectHolesController {
     return this.detectHolesService.update(+id, updateDetectHoleDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.detectHolesService.remove(+id);
-  }
+  //nao pode deletar nenhum buraco
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.detectHolesService.remove(+id);
+  // }
 }
