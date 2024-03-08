@@ -7,17 +7,17 @@ import { Between, Repository } from 'typeorm';
 import { Patalogia } from './entities/detect-hole.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Usuario } from 'src/login/entities/user.entity';
+import { FactoryPosActionsService } from './PosDetectionActions/services/factory-pos-actions/factory-pos-actions.service';
 
 @Injectable()
 export class DetectHolesService {
   constructor(private api: ApiDetectHoleService,
     @InjectRepository(Patalogia) private holes: Repository<Patalogia>,
-    @InjectRepository(Usuario) private user: Repository<Usuario>
-
+    @InjectRepository(Usuario) private user: Repository<Usuario>,
+    private posDetectActions: FactoryPosActionsService,
   ) { }
 
   async validHole(hole: ValidHolesDto, user: Usuario) {
-
 
     if (!(await this.outofRange(hole))) throw new HttpException("Buraco no perimetro ja registrado", 405)
 
@@ -35,32 +35,26 @@ export class DetectHolesService {
       descricao: hole.desc,
       latitude: hole.latitude,
       longitude: hole.longitude,
-      bairro: quarter,
-      rua: road,
+      bairro: quarter ?? "?", //caso nao tenha nome de bairro registrado no maps
+      rua: road ?? "?", //caso nao tiver nome da rua registrado no maps
     }
     this.holes.insert({
       ...newHole,
       idUsuario: user
     })
-    if (nHoles) await this.incrementRank(user, nHoles)
+    if (nHoles) {
+      await this.posDetectAction(user, newHole as Patalogia)
+    }
     // delete newHole.idUsuario //fiz isso para nao voltar meu usuario junto com meu objeto no json
 
     //func para salvar no banco para salvar o obj
     return newHole
   }
 
-  private async incrementRank(user: Usuario, numberofHoles: number) {
-    this.user.findOne({
-      where: {
-        iduser: user.iduser
-      }
-    }).then(async (result) => {
-      await this.user.update({
-        iduser: result.iduser
-      }, {
-        rank: (0.1 * numberofHoles) + (+(result.rank))
-      })
-    })
+  private async posDetectAction(user: Usuario, hole: Patalogia) {
+    for (const action of this.posDetectActions.getPosActions()) {
+      await action.functionPosDetect(user, hole) //esse metodos sao assincros para uma melhor performace eu nao vou esperalos
+    }
   }
 
   async findAll() {

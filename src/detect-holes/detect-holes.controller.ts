@@ -5,19 +5,14 @@ import { UpdateDetectHoleDto } from './dto/update-detect-hole.dto';
 import { TokenGuardGuard } from 'src/globalGuards/token-guard/token-guard.guard';
 import { ValidHolesDto } from './dto/validHole-post';
 import { Request, Response } from 'express';
-import { NotificationServiceService } from 'globalServices/notification-service/notification-service.service';
 import { TokenGenerateService } from 'globalServices/token-generate-service/token-generate.service';
-import { Usuario } from 'src/login/entities/user.entity';
 import { AcessoGuard } from 'src/globalGuards/acesso-guard/acesso.guard';
 
 @Controller('detectholes')
 export class DetectHolesController {
-  constructor(private token: TokenGenerateService, private email: NotificationServiceService, private readonly detectHolesService: DetectHolesService) { }
+  constructor(private token: TokenGenerateService,
+    private readonly detectHolesService: DetectHolesService) { }
 
-  @Post("/tombelli")//rota de debug so para teste vai ser apagada pq vai ser um serviço apenas 
-  async sendEmal(@Body() body: any) {
-    return await this.email.notification(body)
-  }
 
   @UseGuards(TokenGuardGuard)
   @Post('/process')
