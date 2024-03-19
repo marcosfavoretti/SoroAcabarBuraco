@@ -1,10 +1,13 @@
 # SETUP DO PROJETO
 
 1. Instale o MySQL e execute na porta padrão.
-2. Crie duas variáveis de ambiente:
-    - user='nomedousuario'
-    - pass="senhadobanco"
-3. Execute `npm i`.
+2. Execute `npm i`.
+3. Crie o arquivo '.env' e adicione as seguintes variaveis de ambiente:
+    - ip = ipOpcional
+    - email = emaildenotificacao
+    - email_password = senhadoemaildenotificacao
+    - user = userdobancodedados
+    - password = senhadobancodedados
 4. Caso seja a primeira vez que estiver rodando o projeto, vá para `app.module.ts` e defina o valor `synchronize: true`. Após iniciar o servidor, volte esse valor para `false`. Isso criará as tabelas e suas dependências.
 
 **Se estiver usando o processamento de imagem, é necessário um webservice feito em Python. Link do projeto `https://github.com/marcosfavoretti/WebServiceHoleDetector.git`**

@@ -5,7 +5,7 @@ export class Email {
     text: string
     constructor(to: string, subject: string, text: string) {
         this.to = to
-        this.from = process.env.email_user
+        this.from = process.env.email
         this.subject = subject
         this.text = text
     }

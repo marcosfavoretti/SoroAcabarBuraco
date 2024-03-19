@@ -25,7 +25,7 @@ import { CheckRoleService } from './globalGuards/acesso-guard/check-role/check-r
       host: 'localhost',
       port: 3306,
       username: process.env.user,
-      password: process.env.pass,
+      password: process.env.password,
       database: 'HoleDetector',
       entities: [Patalogia, Usuario, PerfilAcesso, Pagina, Endereco, AcessoLiberacao],
       synchronize: false,
