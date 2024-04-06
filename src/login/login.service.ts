@@ -8,12 +8,15 @@ import { ValidateDto } from './dto/validate-login.dto';
 import { Response } from 'express';
 import { TokenGenerateService } from 'globalServices/token-generate-service/token-generate.service';
 import { Endereco } from './entities/endereco.entity';
+import { CheckRoleService } from 'src/globalGuards/acesso-guard/check-role/check-role.service';
 
 @Injectable()
 export class LoginService {
   constructor(@InjectRepository(Usuario) private login: Repository<Usuario>,
     @InjectRepository(Endereco) private endereco: Repository<Endereco>
-    , private token: TokenGenerateService) { }
+    , private token: TokenGenerateService,
+  
+   ) { }
 
   async create(createLoginDto: CreateLoginDto) {
     const newUser = {
@@ -57,7 +60,10 @@ export class LoginService {
         ['idPerfil']
     })
     if (!user) throw new HttpException("Credenciais não encontradas", HttpStatus.NOT_FOUND)
-    return { uid: this.token.getToken(user) }
+    return { uid: this.token.getToken(user)}
+  }
+  async getRole(){
+
   }
 
   async update(id: number, updateLoginDto: CreateLoginDto) {

@@ -8,10 +8,11 @@ import { Endereco } from './entities/endereco.entity';
 import { Pagina } from './entities/pagina.entity';
 import { AcessoLiberacao } from './entities/acessosLiberacao.entiy';
 import { PerfilAcesso } from './entities/perfildeacesso.entity';
+import { CheckRoleService } from 'src/globalGuards/acesso-guard/check-role/check-role.service';
 
 @Module({
   controllers: [LoginController],
-  providers: [LoginService, TokenGenerateService],
+  providers: [LoginService, TokenGenerateService, CheckRoleService],
   imports: [TypeOrmModule.forFeature([Usuario, Endereco, Pagina, AcessoLiberacao, PerfilAcesso])]
 })
 export class LoginModule { }

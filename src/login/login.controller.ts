@@ -6,9 +6,13 @@ import { ValidateDto } from './dto/validate-login.dto';
 import { TokenGuardGuard } from 'src/globalGuards/token-guard/token-guard.guard';
 import { Request, Response } from 'express';
 import { TokenGenerateService } from 'globalServices/token-generate-service/token-generate.service';
+import { CheckRoleService } from 'src/globalGuards/acesso-guard/check-role/check-role.service';
+import { Usuario } from './entities/user.entity';
+import { PerfilAcesso } from './entities/perfildeacesso.entity';
 @Controller('login')
 export class LoginController {
-  constructor(private readonly loginService: LoginService, private token: TokenGenerateService) { }
+  constructor(private readonly loginService: LoginService, private token: TokenGenerateService,
+    private role: CheckRoleService) { }
 
   @Post()
   async create(@Body(new ValidationPipe({ whitelist: true })) createLoginDto: CreateLoginDto) {
