@@ -28,7 +28,7 @@ export class EMailConnection {
             host: 'smtp.gmail.com',
             secure: false,
             auth: {
-                user: process.env.email_user,
+                user: process.env.email,
                 pass: process.env.email_password
             },
             tls: {
