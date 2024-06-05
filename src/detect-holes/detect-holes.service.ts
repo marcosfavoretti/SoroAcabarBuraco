@@ -1,5 +1,4 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { CreateDetectHoleDto } from './dto/create-detect-hole.dto';
 import { UpdateDetectHoleDto } from './dto/update-detect-hole.dto';
 import { ValidHolesDto } from './dto/validHole-post';
 import { ApiDetectHoleService } from './services/api-detect-hole-service/api-detect-hole.service';
